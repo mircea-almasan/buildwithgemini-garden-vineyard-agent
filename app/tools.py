@@ -1,17 +1,23 @@
 import datetime
+import os
 from zoneinfo import ZoneInfo
 from typing import Dict, Any, List, Optional
 from google.cloud import firestore
 
-# CRITICAL: Hardcoded project ID string literal for Firestore Client
-# Do NOT read from GOOGLE_CLOUD_PROJECT or google.auth.default() (returns project number on Agent Platform)
-FIRESTORE_PROJECT_ID = "qwiklabs-gcp-01-b2884ff80cc8"
-GCS_ASSETS_BUCKET = "garden-vineyard-assets-b2884ff80cc8"
+# Firestore project is configured through the environment.
+FIRESTORE_PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
+
+if not FIRESTORE_PROJECT_ID:
+    raise ValueError(
+        "GOOGLE_CLOUD_PROJECT is not configured. Set it in your .env file."
+    )
+
+GCS_ASSETS_BUCKET = "garden-vineyard-assets-gva"
 GCS_BASE_URL = f"https://storage.googleapis.com/{GCS_ASSETS_BUCKET}"
 
 
 def get_firestore_client() -> firestore.Client:
-    """Returns a Firestore client initialized with the hardcoded project ID."""
+    """Returns a Firestore client initialized with the configured project ID."""
     return firestore.Client(project=FIRESTORE_PROJECT_ID)
 
 

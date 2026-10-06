@@ -3,10 +3,14 @@ import json
 import re
 import uuid
 from typing import Dict, Any, List
+from dotenv import load_dotenv
 
-os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "1")
-os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "qwiklabs-gcp-01-b2884ff80cc8")
-os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "us-east1")
+# Load local configuration from .env
+load_dotenv()
+
+# Local development uses the Gemini API key from .env.
+# Make sure an old Vertex AI configuration cannot override it.
+os.environ.pop("GOOGLE_GENAI_USE_VERTEXAI", None)
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse

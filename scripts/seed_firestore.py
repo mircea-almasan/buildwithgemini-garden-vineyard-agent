@@ -1,9 +1,15 @@
-import sys
+import os
+from dotenv import load_dotenv
 from google.cloud import firestore
 
-# CRITICAL: Hardcoded project ID string literal
-# Do NOT read from GOOGLE_CLOUD_PROJECT or google.auth.default() (returns project number on Agent Platform)
-FIRESTORE_PROJECT_ID = "qwiklabs-gcp-01-b2884ff80cc8"
+load_dotenv()
+
+FIRESTORE_PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
+
+if not FIRESTORE_PROJECT_ID:
+    raise ValueError(
+        "GOOGLE_CLOUD_PROJECT is not configured. Set it in your .env file."
+    )
 
 def seed_database():
     print(f"Connecting to Firestore with project ID: {FIRESTORE_PROJECT_ID}")
